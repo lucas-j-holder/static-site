@@ -10,7 +10,7 @@ class LeafNode(HTMLNode):
         start_tag = ""
         end_tag = ""
         if self.tag != None:
-            start_tag = f"<{self.tag} {self.props_to_html()}>"
+            start_tag = f"<{self.tag}{self.props_to_html()}>"
             end_tag = f"</{self.tag}>"
         
         return f"{start_tag}{self.value}{end_tag}"

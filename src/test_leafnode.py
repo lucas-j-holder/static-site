@@ -6,7 +6,7 @@ class Test_LeafNode(unittest.TestCase):
         node = LeafNode("a", "This is a test node.")
 
         text = node.to_html()
-        self.assertEqual(text, "<a >This is a test node.</a>")
+        self.assertEqual(text, "<a>This is a test node.</a>")
 
         node2 = LeafNode(None, "This is a tagless node.")
         text2 = node2.to_html()

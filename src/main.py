@@ -1,4 +1,4 @@
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, extract_markdown_images
 from leafnode import LeafNode
 
 def text_node_to_html_node(text_node:TextNode):
@@ -20,6 +20,6 @@ def text_node_to_html_node(text_node:TextNode):
 
 def main():
     test_node = TextNode("This is a test node", TextType.BOLD, None)
-    print(test_node)
+    
 
 main()

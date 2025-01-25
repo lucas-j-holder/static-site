@@ -66,9 +66,31 @@ def text_to_textnodes(text):
     start_node = [TextNode(text, TextType.TEXT)]
     return split_nodes_links(split_nodes_image(split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter(start_node, "**", TextType.BOLD), "*", TextType.ITALIC), "`", TextType.CODE)))
 
+def markdown_to_blocks(markdown):
+    markdown_lines = markdown.split("\n")
+    blocks = []
+    block = ""
 
+    for line in markdown_lines:
+        if line == "":
+            if block != "":
+                blocks.append(block.strip())
+                block = ""
+            else:
+                continue
+        else:
+            block += line + "\n"
+    if block != "":
+        blocks.append(block.strip())
+    return blocks
 
 
 if __name__ == "__main__":
-    text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
-    print(text_to_textnodes(text))
+    text = """# This is a heading
+
+This is a paragraph of text. It has some **bold** and *italic* words inside of it.
+
+* This is the first list item in a list block
+* This is a list item
+* This is another list item"""
+    print(markdown_to_blocks(text))

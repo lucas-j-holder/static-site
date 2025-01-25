@@ -1,4 +1,5 @@
-from textnode import TextNode, TextType, extract_markdown_images
+from textnode import TextNode, TextType
+from markdown import extract_markdown_images
 from leafnode import LeafNode
 
 def text_node_to_html_node(text_node:TextNode):

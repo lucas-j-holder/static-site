@@ -1,6 +1,6 @@
 import unittest
 
-from markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_links, text_to_textnodes, markdown_to_blocks
+from markdown import block_to_block_type, split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_links, text_to_textnodes, markdown_to_blocks
 from textnode import TextType, TextNode
     
 class Test_spliting_functions(unittest.TestCase):
@@ -148,6 +148,37 @@ class Test_spliting_functions(unittest.TestCase):
         result = text_to_textnodes(starting_text)
 
         self.assertEqual(expected, result)
+    
+    def test_block_type(self):
+        self.assertEqual("heading", block_to_block_type("# h1"))
+        self.assertEqual("heading", block_to_block_type("###### h6"))
+        self.assertEqual("paragraph", block_to_block_type("####### invalid"))
+
+        self.assertEqual("paragraph", block_to_block_type("```"))
+        self.assertEqual("code", block_to_block_type("```````"))
+        self.assertEqual("code", block_to_block_type("```code```"))
+
+        self.assertEqual("quote", block_to_block_type("> this is a quote"))
+        self.assertEqual("quote", block_to_block_type("> multi\n> line\n>quote"))
+
+        self.assertEqual("unordered list", block_to_block_type("- this is a unordered list"))
+        self.assertEqual("unordered list", block_to_block_type("* test asterisk."))
+        self.assertEqual("unordered list", block_to_block_type("* This\n- is\n* unordered"))
+
+        self.assertEqual("ordered list", block_to_block_type("""1. Test
+2. Test
+3. Test
+4. Test
+5. Test
+6. Test
+7. Test
+8. Test
+9. Test
+10. Test
+11. Test
+12. Test
+13. Test"""))
+        
 
 
 class Test_extract_markdown_images(unittest.TestCase):

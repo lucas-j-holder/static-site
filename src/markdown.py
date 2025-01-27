@@ -84,13 +84,47 @@ def markdown_to_blocks(markdown):
         blocks.append(block.strip())
     return blocks
 
+def block_to_block_type(block):
+    lines = block.split("\n")
+    heading_regex = re.compile(r"^#{1,6} ")
+    code_regex = re.compile(r"^`{3}.+`{3}$")
+    unordered_regex = re.compile(r"^[\*-] ")
+    if heading_regex.match(block): return "heading"
+    if code_regex.match(block): return "code"
+    quote = True
+    for line in lines:
+        if len(line) == 0: quote = False; break
+        if line[0] != ">": quote = False; break
+    if quote: return "quote"
+    if unordered_regex.match(block):
+        if len(lines) == 1: return "unordered list"
+        else:
+            unordered = True
+            for line in lines[1:]:
+                if not unordered_regex.match(line): unordered = False; break
+            if unordered: return "unordered list"
+    ordered = True
+    for i in range(len(lines)):
+        if len(lines[i]) < len(str(i + 1)) + 2: ordered = False; break
+
+        if lines[i][:len(str(i + 1)) + 2] != f"{i+1}. ": ordered = False; break
+    if ordered: return "ordered list"
+    return "paragraph"
+    
+
 
 if __name__ == "__main__":
-    text = """# This is a heading
-
-This is a paragraph of text. It has some **bold** and *italic* words inside of it.
-
-* This is the first list item in a list block
-* This is a list item
-* This is another list item"""
-    print(markdown_to_blocks(text))
+    text = """1. Test
+2. Test
+3. Test
+4. Test
+5. Test
+6. Test
+7. Test
+8. Test
+9. Test
+10. Test
+11. Test
+12. Test
+13. Test"""
+    print(block_to_block_type(text))

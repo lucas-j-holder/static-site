@@ -72,3 +72,6 @@ class Test_ParentNode(unittest.TestCase):
         expected_string = "<ol \"style\": \"color:red\" ><li \"style\": \"color:green\" >List Item 1</li><ul \"style\": \"color:blue\" ><li>List Item 2</li><li>List Item 3</li></ul></ol>"
 
         self.assertEqual(node.to_html(), expected_string)
+
+if __name__ == "__main__":
+    unittest.main()

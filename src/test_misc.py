@@ -53,3 +53,5 @@ class Test_text_node_to_html_node(unittest.TestCase):
 
         self.assertEqual(node.to_html(), expected_string)
     
+if __name__ == "__main__":
+    unittest.main()

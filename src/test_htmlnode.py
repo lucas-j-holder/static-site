@@ -10,3 +10,6 @@ class Test_HTMLNode(unittest.TestCase):
     def test_repr(self):
         node = HTMLNode(tag = "a", value="Test Link")
         self.assertEqual(node.__repr__(), "HTMLNode(a, Test Link, None, None)")
+
+if __name__ == "__main__":
+    unittest.main()

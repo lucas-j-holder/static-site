@@ -89,7 +89,7 @@ def block_to_block_type(block):
     heading_regex = re.compile(r"^#{1,6} ")
     code_regex = re.compile(r"^`{3}.+`{3}$")
     unordered_regex = re.compile(r"^[\*-] ")
-    if heading_regex.match(block): return "heading"
+    if heading_regex.match(block): return f"heading {heading_regex.match(block).end() - 1}"
     if code_regex.match(block): return "code"
     quote = True
     for line in lines:
@@ -114,17 +114,5 @@ def block_to_block_type(block):
 
 
 if __name__ == "__main__":
-    text = """1. Test
-2. Test
-3. Test
-4. Test
-5. Test
-6. Test
-7. Test
-8. Test
-9. Test
-10. Test
-11. Test
-12. Test
-13. Test"""
+    text = "###### Heading 6"
     print(block_to_block_type(text))

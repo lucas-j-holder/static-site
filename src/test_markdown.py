@@ -150,8 +150,8 @@ class Test_spliting_functions(unittest.TestCase):
         self.assertEqual(expected, result)
     
     def test_block_type(self):
-        self.assertEqual("heading", block_to_block_type("# h1"))
-        self.assertEqual("heading", block_to_block_type("###### h6"))
+        self.assertEqual("heading 1", block_to_block_type("# h1"))
+        self.assertEqual("heading 6", block_to_block_type("###### h6"))
         self.assertEqual("paragraph", block_to_block_type("####### invalid"))
 
         self.assertEqual("paragraph", block_to_block_type("```"))

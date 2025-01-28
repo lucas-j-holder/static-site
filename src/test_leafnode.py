@@ -11,3 +11,6 @@ class Test_LeafNode(unittest.TestCase):
         node2 = LeafNode(None, "This is a tagless node.")
         text2 = node2.to_html()
         self.assertEqual(text2, "This is a tagless node.")
+
+if __name__ == "__main__":
+    unittest.main()

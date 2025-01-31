@@ -36,7 +36,16 @@ def generate_page(from_path, template_path, dst_path):
         destination.write(page)
     
 
+def generate_page_recursively(from_path, template_path, dst_path):
+    for object in os.listdir(from_path):
+        object_path = os.path.join(from_path, object)
+        new_dst_path = os.path.join(dst_path, object)
 
+        if os.path.isfile(object_path):
+            generate_page(object_path, template_path, new_dst_path.split(".")[0]+".html")
+        elif os.path.isdir(object_path):
+            os.mkdir(new_dst_path)
+            generate_page_recursively(object_path, template_path, new_dst_path)
 
 
             
@@ -65,9 +74,11 @@ def move_static_files_to_public_folder():
     else:
         os.mkdir(public_folder)
     copy_static_files(static_folder, public_folder)
+    
 
 def main():
     move_static_files_to_public_folder()
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_page_recursively("content/", "template.html", "public/")
+    # generate_page("content/index.md", "template.html", "public/index.html")
 
 main()

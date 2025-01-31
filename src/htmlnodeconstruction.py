@@ -1,6 +1,28 @@
-from markdown import block_to_block_type, markdown_to_blocks
+from markdown import block_to_block_type, markdown_to_blocks, text_to_textnodes
 from leafnode import LeafNode
 from parentnode import ParentNode
+from textnode import TextNode, TextType
+import re
+
+def text_nodes_to_html_nodes(text_nodes:list[TextNode]):
+    nodes = []
+    for text_node in text_nodes:
+        match text_node.text_type:
+            case TextType.TEXT:
+                nodes.append(LeafNode(None, text_node.text))
+            case TextType.BOLD:
+                nodes.append(LeafNode("b", text_node.text))
+            case TextType.ITALIC:
+                nodes.append(LeafNode("i", text_node.text))
+            case TextType.CODE:
+                nodes.append(LeafNode("code", text_node.text))
+            case TextType.LINK:
+                nodes.append(LeafNode("a", text_node.text, {"href": text_node.url}))
+            case TextType.IMAGE:
+                nodes.append(LeafNode("img", "", {"href": text_node.url, "alt": text_node.text}))
+            case _:
+                raise ValueError("TextNode has invalid TextType.")
+    return nodes
 
 def get_html_tag(block):
     block_type = block_to_block_type(block)
@@ -25,10 +47,21 @@ def block_text_to_children(tag, block):
     children = []
     if tag in ["ul", "ol"]:
         for line in lines:
-            children.append(LeafNode("li", line))
+            text_nodes = text_to_textnodes(" ".join(line.split(" ")[1:]))
+            value = text_nodes_to_html_nodes(text_nodes)
+            new_line = ""
+            for node in value:
+                new_line += node.to_html()
+            children.append(LeafNode("li", new_line))
     elif tag in ["pre"]:
+        code_regex = re.compile(r"^`{3}(.+)`{3}$", re.S)
+        matches = code_regex.match(block)
+        lines = matches.group(1).split("\n")
         for line in lines:
-            children.append(LeafNode("code", line))
+            children.append(LeafNode("code", line + "<br>"))
+    elif tag in ["p"]:
+        text_nodes = text_to_textnodes(lines[0])
+        children = text_nodes_to_html_nodes(text_nodes)
     if children == []:
         return None
     return children
@@ -39,6 +72,8 @@ def construct_html_node(tag, block):
     value = None
     if children is None:
         value = block
+        if tag in ["h1","h2","h3","h4","h5","h6","blockquote"]:
+            value = " ".join(value.split(" ")[1:])
         node = LeafNode(tag, value, children)
     else:
         node = ParentNode(tag, children)

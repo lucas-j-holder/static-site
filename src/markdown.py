@@ -84,10 +84,12 @@ def markdown_to_blocks(markdown):
         blocks.append(block.strip())
     return blocks
 
+
+
 def block_to_block_type(block):
     lines = block.split("\n")
     heading_regex = re.compile(r"^#{1,6} ")
-    code_regex = re.compile(r"^`{3}.+`{3}$")
+    code_regex = re.compile(r"^`{3}.+`{3}$", re.S)
     unordered_regex = re.compile(r"^[\*-] ")
     if heading_regex.match(block): return f"heading {heading_regex.match(block).end() - 1}"
     if code_regex.match(block): return "code"
